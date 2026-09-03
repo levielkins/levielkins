@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Add Device - SNMP Monitor{% endblock %}
+{% block content %}
+  <p><a href="/customers/{{ customer.id }}">&larr; {{ customer.name }}</a></p>
+  <h1>Add Device to {{ customer.name }}</h1>
+  <form method="post" action="/customers/{{ customer.id }}/devices/new" class="form">
+    <label>Device Name
+      <input type="text" name="name" placeholder="e.g. Core Switch" required>
+    </label>
+    <label>IP Address
+      <input type="text" name="ip_address" placeholder="e.g. 192.168.1.1" required>
+    </label>
+    <label>Port
+      <input type="number" name="port" value="161" min="1" max="65535">
+    </label>
+    <label>SNMP Version
+      <select name="snmp_version">
+        <option value="2c" selected>2c</option>
+        <option value="1">1</option>
+      </select>
+    </label>
+    <label>Community String
+      <input type="text" name="community" value="public">
+    </label>
+    <label>Poll Interval (seconds)
+      <input type="number" name="poll_interval_seconds" value="300" min="15">
+    </label>
+    <button type="submit">Add Device</button>
+  </form>
+{% endblock %}

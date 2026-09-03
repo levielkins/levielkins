@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SNMP Monitor{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">SNMP Monitor</a>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/customers/new">Add Customer</a>
+    </nav>
+  </header>
+  <main class="container">
+    {% if request.query_params.get('msg') %}
+      <div class="flash">{{ request.query_params.get('msg') }}</div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

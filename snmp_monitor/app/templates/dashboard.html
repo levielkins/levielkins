@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - SNMP Monitor{% endblock %}
+{% block content %}
+  <h1>Customers</h1>
+
+  {% if not summaries %}
+    <p class="empty">No customers yet. <a href="/customers/new">Add your first customer</a>.</p>
+  {% else %}
+    <table class="grid">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Devices</th>
+          <th>Up</th>
+          <th>Down</th>
+          <th>Unknown</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in summaries %}
+          <tr>
+            <td><a href="/customers/{{ s.customer.id }}">{{ s.customer.name }}</a></td>
+            <td>{{ s.total }}</td>
+            <td class="status-up">{{ s.up }}</td>
+            <td class="status-down">{{ s.down }}</td>
+            <td class="status-unknown">{{ s.unknown }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}

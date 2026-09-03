@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ customer.name }} - SNMP Monitor{% endblock %}
+{% block content %}
+  <p><a href="/">&larr; Dashboard</a></p>
+  <h1>{{ customer.name }}</h1>
+  {% if customer.notes %}<p class="notes">{{ customer.notes }}</p>{% endif %}
+
+  <div class="actions">
+    <a class="button" href="/customers/{{ customer.id }}/devices/new">Add Device</a>
+    <form method="post" action="/customers/{{ customer.id }}/delete" onsubmit="return confirm('Delete this customer and all its devices?');" style="display:inline">
+      <button type="submit" class="button danger">Delete Customer</button>
+    </form>
+  </div>
+
+  <h2>Devices</h2>
+  {% if not customer.devices %}
+    <p class="empty">No devices yet.</p>
+  {% else %}
+    <table class="grid">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>IP Address</th>
+          <th>Status</th>
+          <th>Last Checked</th>
+          <th>Enabled</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for device in customer.devices %}
+          {% set latest = device.latest_result %}
+          <tr>
+            <td><a href="/devices/{{ device.id }}">{{ device.name }}</a></td>
+            <td>{{ device.ip_address }}</td>
+            <td>
+              {% if latest is none %}
+                <span class="badge unknown">unknown</span>
+              {% elif latest.is_up %}
+                <span class="badge up">up</span>
+              {% else %}
+                <span class="badge down">down</span>
+              {% endif %}
+            </td>
+            <td>{{ latest.timestamp.strftime('%Y-%m-%d %H:%M:%S') ~ ' UTC' if latest else '-' }}</td>
+            <td>{{ 'yes' if device.enabled else 'no' }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}
