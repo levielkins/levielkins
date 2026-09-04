@@ -53,8 +53,24 @@ device's page for an on-demand check.
 
 Any device with an SNMP agent enabled and a known community string works —
 switches, routers, firewalls, printers, Linux/Windows hosts with an SNMP
-daemon installed. To test locally with no hardware, install `net-snmp`'s
-agent and point a device at `127.0.0.1`:
+daemon installed. Public internet hosts (like `8.8.8.8` or `1.1.1.1`) will
+**never** work — SNMP is a local management protocol, not something exposed
+to the internet.
+
+**No hardware or OS SNMP agent handy? Use the built-in test agent.**
+It works the same on Linux, macOS, and Windows (it's plain Python/pysnmp,
+no OS feature needed):
+
+```bash
+source .venv/bin/activate      # Windows: .venv\Scripts\Activate.ps1
+python test_agent.py           # listens on 127.0.0.1:1161, community "public"
+```
+
+Then in the app, add a device with IP `127.0.0.1`, port `1161`, version
+`2c`, community `public`. Leave the agent running in that terminal while you
+poll — stop it with Ctrl+C when you're done.
+
+Alternatively, on Linux you can use `net-snmp`'s real agent:
 
 ```bash
 sudo apt-get install snmpd
