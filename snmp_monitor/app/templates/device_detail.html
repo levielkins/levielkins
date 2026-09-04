@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}{{ device.name }} - SNMP Monitor{% endblock %}
+{% block content %}
+  <p><a href="/customers/{{ device.customer.id }}">&larr; {{ device.customer.name }}</a></p>
+  <h1>{{ device.name }}</h1>
+
+  <table class="info">
+    <tr><th>IP Address</th><td>{{ device.ip_address }}:{{ device.port }}</td></tr>
+    <tr><th>SNMP Version</th><td>{{ device.snmp_version }}</td></tr>
+    <tr><th>Poll Interval</th><td>{{ device.poll_interval_seconds }}s</td></tr>
+    <tr><th>Enabled</th><td>{{ 'yes' if device.enabled else 'no' }}</td></tr>
+    {% if device.latest_result %}
+      {% set latest = device.latest_result %}
+      <tr><th>Status</th><td>
+        {% if latest.is_up %}<span class="badge up">up</span>{% else %}<span class="badge down">down</span>{% endif %}
+      </td></tr>
+      <tr><th>Last Checked</th><td>{{ latest.timestamp.strftime('%Y-%m-%d %H:%M:%S') }} UTC</td></tr>
+      <tr><th>Response Time</th><td>{{ latest.response_time_ms ~ ' ms' if latest.response_time_ms else '-' }}</td></tr>
+      <tr><th>System Description</th><td>{{ latest.sys_descr or '-' }}</td></tr>
+      <tr><th>System Name</th><td>{{ latest.sys_name or '-' }}</td></tr>
+      <tr><th>System Contact</th><td>{{ latest.sys_contact or '-' }}</td></tr>
+      <tr><th>System Location</th><td>{{ latest.sys_location or '-' }}</td></tr>
+      <tr><th>System Uptime</th><td>{{ latest.sys_uptime or '-' }}</td></tr>
+      {% if latest.error_message %}
+        <tr><th>Last Error</th><td class="error">{{ latest.error_message }}</td></tr>
+      {% endif %}
+    {% endif %}
+  </table>
+
+  <div class="actions">
+    <form method="post" action="/devices/{{ device.id }}/poll" style="display:inline">
+      <button type="submit" class="button">Poll Now</button>
+    </form>
+    <form method="post" action="/devices/{{ device.id }}/toggle" style="display:inline">
+      <button type="submit" class="button">{{ 'Disable' if device.enabled else 'Enable' }}</button>
+    </form>
+    <form method="post" action="/devices/{{ device.id }}/delete" onsubmit="return confirm('Delete this device?');" style="display:inline">
+      <button type="submit" class="button danger">Delete Device</button>
+    </form>
+  </div>
+
+  <h2>Poll History</h2>
+  {% if not history %}
+    <p class="empty">No polls yet.</p>
+  {% else %}
+    <table class="grid">
+      <thead>
+        <tr>
+          <th>Time (UTC)</th>
+          <th>Status</th>
+          <th>Response Time</th>
+          <th>Detail</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in history %}
+          <tr>
+            <td>{{ r.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{% if r.is_up %}<span class="badge up">up</span>{% else %}<span class="badge down">down</span>{% endif %}</td>
+            <td>{{ r.response_time_ms ~ ' ms' if r.response_time_ms else '-' }}</td>
+            <td>{{ r.error_message or (r.sys_name or '') }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}

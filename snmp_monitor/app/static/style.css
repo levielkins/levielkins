@@ -1,0 +1,120 @@
+:root {
+  color-scheme: light dark;
+  --up: #1a7f37;
+  --down: #cf222e;
+  --unknown: #6e7781;
+  --border: #d0d7de;
+}
+
+body {
+  font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar .brand {
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.topbar nav a {
+  margin-left: 1rem;
+  text-decoration: none;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+table.grid, table.info {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+table.grid th, table.grid td,
+table.info th, table.info td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+table.info th {
+  width: 220px;
+  background: rgba(127, 127, 127, 0.08);
+}
+
+.badge {
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+}
+
+.badge.up { background: var(--up); }
+.badge.down { background: var(--down); }
+.badge.unknown { background: var(--unknown); }
+
+.status-up { color: var(--up); font-weight: 600; }
+.status-down { color: var(--down); font-weight: 600; }
+.status-unknown { color: var(--unknown); font-weight: 600; }
+
+.form label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.form input, .form select, .form textarea {
+  display: block;
+  margin-top: 0.25rem;
+  width: 100%;
+  max-width: 400px;
+  padding: 0.4rem;
+  box-sizing: border-box;
+}
+
+.button, button {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(127, 127, 127, 0.08);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  font-size: 0.9rem;
+}
+
+.button.danger, button.danger {
+  border-color: var(--down);
+  color: var(--down);
+}
+
+.actions {
+  margin: 1rem 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.empty { color: var(--unknown); }
+.error { color: var(--down); }
+.notes { color: var(--unknown); }
+
+.flash {
+  background: rgba(26, 127, 55, 0.1);
+  border: 1px solid var(--up);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
